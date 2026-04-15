@@ -1,0 +1,34 @@
+{{define "dashboard-stats"}}
+{{if .Stats}}
+<div class="stat-card stat-total">
+    <div class="stat-icon">🌐</div>
+    <div class="stat-body">
+        <div class="stat-value">{{.Stats.Total}}</div>
+        <div class="stat-label">Total Services</div>
+    </div>
+</div>
+<div class="stat-card stat-active">
+    <div class="stat-icon">✅</div>
+    <div class="stat-body">
+        <div class="stat-value">{{.Stats.Active}}</div>
+        <div class="stat-label">Active</div>
+    </div>
+</div>
+<div class="stat-card stat-paused">
+    <div class="stat-icon">⏸</div>
+    <div class="stat-body">
+        <div class="stat-value">{{.Stats.Paused}}</div>
+        <div class="stat-label">Paused</div>
+    </div>
+</div>
+{{range .Stats.ByCategory}}
+<div class="stat-card">
+    <div class="stat-icon">📦</div>
+    <div class="stat-body">
+        <div class="stat-value">{{.Count}}</div>
+        <div class="stat-label">{{.Category}}</div>
+    </div>
+</div>
+{{end}}
+{{end}}
+{{end}}

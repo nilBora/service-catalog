@@ -1,0 +1,34 @@
+{{define "service-card"}}
+<div class="service-card {{statusClass .Status}}" style="--card-color: {{.Color}}">
+    <div class="service-card-header">
+        <div class="service-logo">
+            {{if hasLogo .LogoURL}}
+                <img src="{{.LogoURL}}" alt="{{.Name}}" onerror="this.parentElement.innerHTML='<div class=\'service-logo-letter\'>{{slice .Name 0 1}}</div>'">
+            {{else if isEmoji .LogoURL}}
+                <div class="service-logo-placeholder">{{emojiValue .LogoURL}}</div>
+            {{else}}
+                <div class="service-logo-letter">{{slice .Name 0 1}}</div>
+            {{end}}
+        </div>
+        <div class="service-info">
+            <div class="service-name">{{.Name}}</div>
+            <div class="service-url">{{.URL}}</div>
+        </div>
+    </div>
+    {{if .Description}}
+    <div class="service-desc">{{.Description}}</div>
+    {{else}}
+    <div class="service-desc"></div>
+    {{end}}
+    <div class="service-card-footer">
+        {{if eq .Status "active"}}
+        <a href="{{.URL}}" target="_blank" rel="noopener noreferrer" class="service-open-btn">
+            Open ↗
+        </a>
+        {{else}}
+        <span class="service-open-btn">Paused</span>
+        {{end}}
+        <span class="status-badge {{statusClass .Status}}">{{.Status}}</span>
+    </div>
+</div>
+{{end}}

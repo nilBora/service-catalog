@@ -1,0 +1,110 @@
+{{define "service-form"}}
+{{if .Service}}
+<div class="modal-header">
+    <h2>Edit Service</h2>
+    <button class="modal-close" onclick="hideModal()">&times;</button>
+</div>
+<div class="modal-body">
+    <form hx-put="/web/services/{{.Service.ID}}"
+          hx-target="#services-table"
+          hx-swap="innerHTML">
+        <div class="form-group">
+            <label>Name *</label>
+            <input type="text" name="name" value="{{.Service.Name}}" required placeholder="My Service">
+        </div>
+        <div class="form-group">
+            <label>URL *</label>
+            <input type="url" name="url" value="{{.Service.URL}}" required placeholder="https://example.com">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" rows="2" placeholder="Short description…">{{.Service.Description}}</textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" name="category" value="{{.Service.Category}}" placeholder="Monitoring, CRM, Docs…">
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status">
+                    <option value="active" {{if eq .Service.Status "active"}}selected{{end}}>Active</option>
+                    <option value="paused" {{if eq .Service.Status "paused"}}selected{{end}}>Paused</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Logo URL or Emoji</label>
+            <input type="text" name="logo_url" value="{{.Service.LogoURL}}"
+                placeholder="https://…/logo.png  or  #🔥  (prefix # for emoji)">
+            <span class="form-hint">Use a full URL for an image, or prefix with # for an emoji (e.g. #🚀)</span>
+        </div>
+        <div class="form-group">
+            <label>Color</label>
+            <div class="color-row">
+                <input type="color" id="color-picker-edit" value="{{.Service.Color}}" data-sync-to="color-text-edit">
+                <input type="text" id="color-text-edit" name="color" value="{{.Service.Color}}" data-sync-to="color-picker-edit" placeholder="#0062ff">
+            </div>
+        </div>
+        <div class="modal-footer" style="padding:0;margin-top:1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="hideModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+{{else}}
+<div class="modal-header">
+    <h2>Add Service</h2>
+    <button class="modal-close" onclick="hideModal()">&times;</button>
+</div>
+<div class="modal-body">
+    <form hx-post="/web/services"
+          hx-target="#services-table"
+          hx-swap="innerHTML">
+        <div class="form-group">
+            <label>Name *</label>
+            <input type="text" name="name" required placeholder="My Service" autofocus>
+        </div>
+        <div class="form-group">
+            <label>URL *</label>
+            <input type="url" name="url" required placeholder="https://example.com">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" rows="2" placeholder="Short description…"></textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" name="category" placeholder="Monitoring, CRM, Docs…" list="category-suggestions">
+                <datalist id="category-suggestions">
+                    <option value="Monitoring">
+                    <option value="CRM">
+                    <option value="Documentation">
+                    <option value="Infrastructure">
+                    <option value="Analytics">
+                    <option value="Internal">
+                    <option value="Other">
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label>Color</label>
+                <div class="color-row">
+                    <input type="color" id="color-picker-new" value="#0062ff" data-sync-to="color-text-new">
+                    <input type="text" id="color-text-new" name="color" value="#0062ff" data-sync-to="color-picker-new" placeholder="#0062ff">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Logo URL or Emoji</label>
+            <input type="text" name="logo_url" placeholder="https://…/logo.png  or  #🔥">
+            <span class="form-hint">Image URL or # + emoji (e.g. #📊)</span>
+        </div>
+        <div class="modal-footer" style="padding:0;margin-top:1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="hideModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Service</button>
+        </div>
+    </form>
+</div>
+{{end}}
+{{end}}

@@ -1,0 +1,20 @@
+{{define "nav"}}
+<nav class="navbar">
+    <a href="/" class="nav-brand">
+        <div class="nav-brand-icon">🧭</div>
+        Services
+    </a>
+    <div class="nav-links">
+        <a href="/" class="nav-link {{if eq .ActivePage "dashboard"}}active{{end}}">Dashboard</a>
+        <a href="/services" class="nav-link {{if eq .ActivePage "services"}}active{{end}}">Manage</a>
+    </div>
+    <div class="nav-actions">
+        <form hx-post="/web/theme" hx-swap="none">
+            <button type="submit" class="btn-icon" title="Toggle theme">
+                {{if eq .Theme "dark"}}🌙{{else if eq .Theme "dark-electric"}}⚡{{else if eq .Theme "dark-cyber"}}🤖{{else}}☀️{{end}}
+            </button>
+        </form>
+        <a href="/logout" class="btn btn-outline btn-small">Logout</a>
+    </div>
+</nav>
+{{end}}

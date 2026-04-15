@@ -1,0 +1,75 @@
+{{define "service-table"}}
+{{if .Services}}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Service</th>
+            <th>URL</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .Services}}
+        <tr>
+            <td>
+                <div style="display:flex; align-items:center; gap:0.625rem;">
+                    <div class="service-logo" style="width:28px;height:28px;border-radius:4px;flex-shrink:0;">
+                        {{if hasLogo .LogoURL}}
+                            <img src="{{.LogoURL}}" alt="{{.Name}}" style="width:100%;height:100%;object-fit:contain;" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:{{.Color}};color:white;font-weight:700;font-size:12px;\'>{{slice .Name 0 1}}</div>'">
+                        {{else if isEmoji .LogoURL}}
+                            <div style="display:flex;align-items:center;justify-content:center;font-size:14px;">{{emojiValue .LogoURL}}</div>
+                        {{else}}
+                            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:{{.Color}};color:white;font-weight:700;font-size:12px;border-radius:4px;">{{slice .Name 0 1}}</div>
+                        {{end}}
+                    </div>
+                    <span style="font-weight:500;">{{.Name}}</span>
+                </div>
+            </td>
+            <td><a href="{{.URL}}" target="_blank" rel="noopener noreferrer" style="color:var(--primary);font-size:0.8125rem;">{{.URL}}</a></td>
+            <td><span style="font-size:0.8125rem;color:var(--text-secondary);">{{.Category}}</span></td>
+            <td><span class="status-badge {{statusClass .Status}}">{{.Status}}</span></td>
+            <td>
+                <div class="actions-cell">
+                    <button class="btn btn-outline btn-small"
+                        hx-get="/web/services/{{.ID}}/edit"
+                        hx-target="#modal-content"
+                        hx-swap="innerHTML">
+                        Edit
+                    </button>
+                    {{if eq .Status "active"}}
+                    <button class="btn btn-small" style="background:var(--warning);color:white;"
+                        hx-put="/web/services/{{.ID}}/status"
+                        hx-vals='{"status":"paused"}'
+                        hx-target="#services-table"
+                        hx-swap="innerHTML"
+                        hx-confirm="Pause this service?">
+                        Pause
+                    </button>
+                    {{else}}
+                    <button class="btn btn-small" style="background:var(--success);color:white;"
+                        hx-put="/web/services/{{.ID}}/status"
+                        hx-vals='{"status":"active"}'
+                        hx-target="#services-table"
+                        hx-swap="innerHTML">
+                        Activate
+                    </button>
+                    {{end}}
+                    <button class="btn btn-danger btn-small"
+                        onclick="showConfirmModal('{{.Name}}', '/web/services/{{.ID}}')">
+                        Delete
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+{{else}}
+<div class="empty-state">
+    <div class="empty-state-icon">📭</div>
+    <p>No services added yet.</p>
+</div>
+{{end}}
+{{end}}

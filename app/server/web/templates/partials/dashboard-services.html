@@ -1,0 +1,28 @@
+{{define "dashboard-services"}}
+{{if .Categories}}
+<div class="category-groups">
+    {{range .Categories}}
+    {{$cat := .}}
+    {{$services := index $.Grouped $cat}}
+    <div class="category-group">
+        <div class="category-header">
+            <div class="category-dot" style="background: {{categoryColor $cat}}"></div>
+            <span class="category-title">{{$cat}}</span>
+            <span class="category-count">{{len $services}}</span>
+        </div>
+        <div class="services-grid">
+            {{range $services}}
+            {{template "service-card" .}}
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+</div>
+{{else}}
+<div class="empty-state">
+    <div class="empty-state-icon">🧭</div>
+    <p>No services yet. Add your first service!</p>
+    <a href="/services" class="btn btn-primary">Manage Services</a>
+</div>
+{{end}}
+{{end}}
