@@ -35,13 +35,8 @@ document.body.addEventListener('htmx:afterSwap', function(e) {
 });
 
 // HTMX: close modal after successful form submit
-document.body.addEventListener('htmx:afterRequest', function(e) {
-    if (e.detail.successful && e.detail.target.id === 'modal-content') {
-        const trigger = e.detail.xhr.getResponseHeader('HX-Trigger');
-        if (trigger && trigger.includes('serviceUpdated')) {
-            hideModal();
-        }
-    }
+document.body.addEventListener('serviceUpdated', function() {
+    hideModal();
 });
 
 // Confirm modal hide after delete

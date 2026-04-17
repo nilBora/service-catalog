@@ -60,7 +60,8 @@
 <div class="modal-body">
     <form hx-post="/web/services"
           hx-target="#services-table"
-          hx-swap="innerHTML">
+          hx-swap="innerHTML"
+          hx-disabled-elt="find button[type='submit']">
         <div class="form-group">
             <label>Name *</label>
             <input type="text" name="name" required placeholder="My Service" autofocus>
