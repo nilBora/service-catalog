@@ -67,6 +67,7 @@ func (h *Handler) Register(r chi.Router) {
 		r.Get("/services", h.handleServices)
 
 		// Services CRUD (HTMX)
+		r.Get("/web/services/panel", h.handleServicesPanel)
 		r.Get("/web/services", h.handleServiceTable)
 		r.Get("/web/services/new", h.handleServiceForm)
 		r.Get("/web/services/{id}/edit", h.handleServiceEditForm)
@@ -74,6 +75,15 @@ func (h *Handler) Register(r chi.Router) {
 		r.Put("/web/services/{id}", h.handleServiceUpdate)
 		r.Put("/web/services/{id}/status", h.handleServiceStatusUpdate)
 		r.Delete("/web/services/{id}", h.handleServiceDelete)
+
+		// Categories CRUD (HTMX)
+		r.Get("/web/categories/panel", h.handleCategoriesPanel)
+		r.Get("/web/categories", h.handleCategoryList)
+		r.Get("/web/categories/new", h.handleCategoryForm)
+		r.Get("/web/categories/{id}/edit", h.handleCategoryEditForm)
+		r.Post("/web/categories", h.handleCategoryCreate)
+		r.Put("/web/categories/{id}", h.handleCategoryUpdate)
+		r.Delete("/web/categories/{id}", h.handleCategoryDelete)
 
 		// Dashboard
 		r.Get("/web/dashboard", h.handleDashboardContent)
@@ -141,6 +151,9 @@ func parseTemplates() (*template.Template, error) {
 		"service-card",
 		"service-form",
 		"service-table",
+		"services-panel",
+		"category-list",
+		"category-form",
 		"dashboard-stats",
 		"dashboard-services",
 	}
@@ -188,6 +201,10 @@ type templateData struct {
 	Stats      *store.DashboardStats
 	Grouped    map[string][]store.Service
 	Categories []string
+
+	// categories
+	ManagedCategories []store.Category
+	Category          *store.Category
 
 	// services list
 	Services []store.Service

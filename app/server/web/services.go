@@ -23,8 +23,10 @@ func (h *Handler) handleServiceTable(w http.ResponseWriter, r *http.Request) {
 
 // handleServiceForm returns an empty service creation form
 func (h *Handler) handleServiceForm(w http.ResponseWriter, r *http.Request) {
+	cats, _ := h.store.ListManagedCategories(r.Context())
 	if err := h.tmpl.ExecuteTemplate(w, "service-form", templateData{
-		Theme: h.getTheme(r),
+		Theme:             h.getTheme(r),
+		ManagedCategories: cats,
 	}); err != nil {
 		h.renderError(w, http.StatusInternalServerError, err.Error())
 	}
@@ -44,9 +46,11 @@ func (h *Handler) handleServiceEditForm(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	cats, _ := h.store.ListManagedCategories(r.Context())
 	if err := h.tmpl.ExecuteTemplate(w, "service-form", templateData{
-		Service: svc,
-		Theme:   h.getTheme(r),
+		Service:           svc,
+		Theme:             h.getTheme(r),
+		ManagedCategories: cats,
 	}); err != nil {
 		h.renderError(w, http.StatusInternalServerError, err.Error())
 	}

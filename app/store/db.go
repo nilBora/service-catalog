@@ -88,10 +88,18 @@ func (s *DB) createSchema() error {
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 		);
 
+		CREATE TABLE IF NOT EXISTS categories (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			name TEXT NOT NULL UNIQUE,
+			sort_order INTEGER DEFAULT 0,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		);
+
 		CREATE INDEX IF NOT EXISTS idx_services_status ON services(status);
 		CREATE INDEX IF NOT EXISTS idx_services_category ON services(category);
 		CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
 		CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires_at);
+		CREATE INDEX IF NOT EXISTS idx_categories_sort ON categories(sort_order);
 	`
 
 	if _, err := s.db.Exec(schema); err != nil {
