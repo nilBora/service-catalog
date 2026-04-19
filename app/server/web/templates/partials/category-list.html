@@ -1,0 +1,56 @@
+{{define "categories-panel"}}
+<div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+    <button class="btn btn-primary"
+        hx-get="/web/categories/new"
+        hx-target="#modal-content"
+        hx-swap="innerHTML">
+        + Add Category
+    </button>
+</div>
+<div id="categories-list">
+    {{template "category-list" .}}
+</div>
+{{end}}
+
+{{define "category-list"}}
+{{if .ManagedCategories}}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th style="width:120px;">Sort Order</th>
+            <th style="width:160px;">Created</th>
+            <th style="width:140px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .ManagedCategories}}
+        <tr>
+            <td style="font-weight:500;">{{.Name}}</td>
+            <td style="color:var(--text-secondary);font-size:0.8125rem;">{{.SortOrder}}</td>
+            <td style="color:var(--text-secondary);font-size:0.8125rem;">{{formatTime .CreatedAt}}</td>
+            <td>
+                <div class="actions-cell">
+                    <button class="btn btn-outline btn-small"
+                        hx-get="/web/categories/{{.ID}}/edit"
+                        hx-target="#modal-content"
+                        hx-swap="innerHTML">
+                        Edit
+                    </button>
+                    <button class="btn btn-danger btn-small"
+                        onclick="showConfirmModal('{{.Name}}', '/web/categories/{{.ID}}', '#categories-list')">
+                        Delete
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+{{else}}
+<div class="empty-state">
+    <div class="empty-state-icon">🏷️</div>
+    <p>No categories yet. Add one to get started.</p>
+</div>
+{{end}}
+{{end}}

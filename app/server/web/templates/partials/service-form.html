@@ -79,13 +79,17 @@
                 <label>Category</label>
                 <input type="text" name="category" placeholder="Monitoring, CRM, Docs…" list="category-suggestions">
                 <datalist id="category-suggestions">
-                    <option value="Monitoring">
-                    <option value="CRM">
-                    <option value="Documentation">
-                    <option value="Infrastructure">
-                    <option value="Analytics">
-                    <option value="Internal">
-                    <option value="Other">
+                    {{if .ManagedCategories}}
+                        {{range .ManagedCategories}}<option value="{{.Name}}">{{end}}
+                    {{else}}
+                        <option value="Monitoring">
+                        <option value="CRM">
+                        <option value="Documentation">
+                        <option value="Infrastructure">
+                        <option value="Analytics">
+                        <option value="Internal">
+                        <option value="Other">
+                    {{end}}
                 </datalist>
             </div>
             <div class="form-group">

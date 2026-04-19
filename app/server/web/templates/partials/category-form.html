@@ -1,0 +1,53 @@
+{{define "category-form"}}
+{{if .Category}}
+<div class="modal-header">
+    <h2>Edit Category</h2>
+    <button class="modal-close" onclick="hideModal()">&times;</button>
+</div>
+<div class="modal-body">
+    <form hx-put="/web/categories/{{.Category.ID}}"
+          hx-target="#categories-list"
+          hx-swap="innerHTML"
+          hx-disabled-elt="find button[type='submit']">
+        <div class="form-group">
+            <label>Name *</label>
+            <input type="text" name="name" value="{{.Category.Name}}" required autofocus>
+        </div>
+        <div class="form-group">
+            <label>Sort Order</label>
+            <input type="number" name="sort_order" value="{{.Category.SortOrder}}" min="0">
+            <span class="form-hint">Lower numbers appear first</span>
+        </div>
+        <div class="modal-footer" style="padding:0;margin-top:1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="hideModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+{{else}}
+<div class="modal-header">
+    <h2>Add Category</h2>
+    <button class="modal-close" onclick="hideModal()">&times;</button>
+</div>
+<div class="modal-body">
+    <form hx-post="/web/categories"
+          hx-target="#categories-list"
+          hx-swap="innerHTML"
+          hx-disabled-elt="find button[type='submit']">
+        <div class="form-group">
+            <label>Name *</label>
+            <input type="text" name="name" required autofocus placeholder="Monitoring, CRM, Docs…">
+        </div>
+        <div class="form-group">
+            <label>Sort Order</label>
+            <input type="number" name="sort_order" value="0" min="0">
+            <span class="form-hint">Lower numbers appear first</span>
+        </div>
+        <div class="modal-footer" style="padding:0;margin-top:1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="hideModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add Category</button>
+        </div>
+    </form>
+</div>
+{{end}}
+{{end}}

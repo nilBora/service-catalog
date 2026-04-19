@@ -1,0 +1,15 @@
+{{define "services-panel"}}
+<div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+    <button class="btn btn-primary"
+        hx-get="/web/services/new"
+        hx-target="#modal-content"
+        hx-swap="innerHTML">
+        + Add Service
+    </button>
+</div>
+<div class="table-container">
+    <div id="services-table">
+        {{template "service-table" .}}
+    </div>
+</div>
+{{end}}

@@ -8,10 +8,12 @@ function hideModal() {
     document.getElementById('modal-content').innerHTML = '';
 }
 
-function showConfirmModal(name, deleteUrl) {
+function showConfirmModal(name, deleteUrl, target) {
     document.getElementById('confirm-item-name').textContent = name;
-    document.getElementById('confirm-delete-btn').setAttribute('hx-delete', deleteUrl);
-    htmx.process(document.getElementById('confirm-delete-btn'));
+    const btn = document.getElementById('confirm-delete-btn');
+    btn.setAttribute('hx-delete', deleteUrl);
+    btn.setAttribute('hx-target', target || '#services-table');
+    htmx.process(btn);
     document.getElementById('confirm-modal').classList.add('show');
 }
 
@@ -35,9 +37,8 @@ document.body.addEventListener('htmx:afterSwap', function(e) {
 });
 
 // HTMX: close modal after successful form submit
-document.body.addEventListener('serviceUpdated', function() {
-    hideModal();
-});
+document.body.addEventListener('serviceUpdated', hideModal);
+document.body.addEventListener('categoryUpdated', hideModal);
 
 // Confirm modal hide after delete
 document.body.addEventListener('htmx:afterRequest', function(e) {

@@ -2,6 +2,15 @@ package store
 
 import "context"
 
+// CategoryStore defines CRUD operations for managed categories
+type CategoryStore interface {
+	CreateCategory(ctx context.Context, c *Category) error
+	GetCategory(ctx context.Context, id int64) (*Category, error)
+	ListManagedCategories(ctx context.Context) ([]Category, error)
+	UpdateCategory(ctx context.Context, c *Category) error
+	DeleteCategory(ctx context.Context, id int64) error
+}
+
 // ServiceStore defines operations for services
 type ServiceStore interface {
 	CreateService(ctx context.Context, s *Service) error
@@ -37,6 +46,7 @@ type SessionStore interface {
 // Store combines all store interfaces
 type Store interface {
 	ServiceStore
+	CategoryStore
 	UserStore
 	SessionStore
 	Close() error
