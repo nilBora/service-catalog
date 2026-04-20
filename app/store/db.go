@@ -29,6 +29,11 @@ func New(dbPath string) (*DB, error) {
 		return nil, fmt.Errorf("failed to create schema: %w", err)
 	}
 
+	if err := store.seedCategories(); err != nil {
+		_ = db.Close()
+		return nil, fmt.Errorf("failed to seed categories: %w", err)
+	}
+
 	log.Printf("[DEBUG] initialized sqlite store at %s", dbPath)
 	return store, nil
 }
@@ -104,6 +109,41 @@ func (s *DB) createSchema() error {
 
 	if _, err := s.db.Exec(schema); err != nil {
 		return fmt.Errorf("failed to create schema: %w", err)
+	}
+	return nil
+}
+
+func (s *DB) seedCategories() error {
+	var count int
+	if err := s.db.QueryRow(`SELECT COUNT(*) FROM categories`).Scan(&count); err != nil {
+		return fmt.Errorf("count categories: %w", err)
+	}
+	if count > 0 {
+		return nil
+	}
+
+	defaults := []struct {
+		name  string
+		order int
+	}{
+		{"Monitoring", 1},
+		{"Infrastructure", 2},
+		{"Analytics", 3},
+		{"CRM", 4},
+		{"Documentation", 5},
+		{"Internal Tools", 6},
+		{"Communication", 7},
+		{"Security", 8},
+		{"CI/CD", 9},
+		{"Other", 10},
+	}
+
+	for _, d := range defaults {
+		if _, err := s.db.Exec(
+			`INSERT INTO categories (name, sort_order) VALUES (?, ?)`, d.name, d.order,
+		); err != nil {
+			return fmt.Errorf("seed category %q: %w", d.name, err)
+		}
 	}
 	return nil
 }
