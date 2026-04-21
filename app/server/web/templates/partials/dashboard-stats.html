@@ -22,13 +22,13 @@
     </div>
 </div>
 {{range .Stats.ByCategory}}
-<div class="stat-card">
+<a href="#cat-{{.Category}}" class="stat-card stat-card--link">
     <div class="stat-icon">📦</div>
     <div class="stat-body">
         <div class="stat-value">{{.Count}}</div>
         <div class="stat-label">{{.Category}}</div>
     </div>
-</div>
+</a>
 {{end}}
 {{end}}
 {{end}}

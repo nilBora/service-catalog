@@ -81,6 +81,8 @@
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
+html { scroll-behavior: smooth; }
+
 /* Reset & Base */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -261,6 +263,15 @@ body {
 .stat-card.stat-total { border-left-color: var(--primary); }
 .stat-card.stat-active { border-left-color: var(--success); }
 .stat-card.stat-paused { border-left-color: var(--warning); }
+
+a.stat-card--link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+a.stat-card--link:hover {
+    border-left-color: var(--primary);
+}
 
 .stat-icon {
     width: 42px;
