@@ -4,7 +4,7 @@
     {{range .Categories}}
     {{$cat := .}}
     {{$services := index $.Grouped $cat}}
-    <div class="category-group">
+    <div class="category-group" id="cat-{{$cat}}">
         <div class="category-header">
             <div class="category-dot" style="background: {{categoryColor $cat}}"></div>
             <span class="category-title">{{$cat}}</span>
