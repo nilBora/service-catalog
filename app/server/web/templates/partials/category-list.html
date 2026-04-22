@@ -17,17 +17,17 @@
 <table class="data-table">
     <thead>
         <tr>
+            <th style="width:32px;"></th>
             <th>Name</th>
-            <th style="width:120px;">Sort Order</th>
             <th style="width:160px;">Created</th>
             <th style="width:140px;">Actions</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="categories-sortable">
         {{range .ManagedCategories}}
-        <tr>
+        <tr data-id="{{.ID}}">
+            <td class="drag-handle" title="Drag to reorder">⠿</td>
             <td style="font-weight:500;">{{.Name}}</td>
-            <td style="color:var(--text-secondary);font-size:0.8125rem;">{{.SortOrder}}</td>
             <td style="color:var(--text-secondary);font-size:0.8125rem;">{{formatTime .CreatedAt}}</td>
             <td>
                 <div class="actions-cell">

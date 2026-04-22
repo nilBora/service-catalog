@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -60,6 +61,23 @@ func (s *DB) UpdateCategory(ctx context.Context, c *Category) error {
 		`UPDATE categories SET name=:name, sort_order=:sort_order WHERE id=:id`, c)
 	if err != nil {
 		return fmt.Errorf("update category %d: %w", c.ID, err)
+	}
+	return nil
+}
+
+// ReorderCategories sets sort_order for each category by its position in the ids slice
+func (s *DB) ReorderCategories(ctx context.Context, ids []string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for i, idStr := range ids {
+		id, err := strconv.ParseInt(idStr, 10, 64)
+		if err != nil {
+			continue
+		}
+		if _, err := s.db.ExecContext(ctx, `UPDATE categories SET sort_order=? WHERE id=?`, i, id); err != nil {
+			return fmt.Errorf("reorder category %d: %w", id, err)
+		}
 	}
 	return nil
 }
