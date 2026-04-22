@@ -47,6 +47,28 @@ document.body.addEventListener('htmx:afterRequest', function(e) {
     }
 });
 
+// Categories drag-and-drop reorder
+function initCategorySortable() {
+    const tbody = document.getElementById('categories-sortable');
+    if (!tbody || typeof Sortable === 'undefined') return;
+    Sortable.create(tbody, {
+        animation: 150,
+        handle: '.drag-handle',
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        onEnd: function() {
+            const ids = [...tbody.querySelectorAll('tr[data-id]')].map(r => r.dataset.id);
+            fetch('/web/categories/reorder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: ids.map(id => 'ids=' + id).join('&'),
+            });
+        },
+    });
+}
+
+document.body.addEventListener('htmx:afterSwap', initCategorySortable);
+
 // Color input sync: keep hex text field in sync with color picker
 document.addEventListener('input', function(e) {
     if (e.target.type === 'color' && e.target.dataset.syncTo) {

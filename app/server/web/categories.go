@@ -121,6 +121,18 @@ func (h *Handler) handleCategoryUpdate(w http.ResponseWriter, r *http.Request) {
 	h.handleCategoryList(w, r)
 }
 
+func (h *Handler) handleCategoryReorder(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	if err := h.store.ReorderCategories(r.Context(), r.Form["ids"]); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
 func (h *Handler) handleCategoryDelete(w http.ResponseWriter, r *http.Request) {
 	id, err := parseID(r, "id")
 	if err != nil {

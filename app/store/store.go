@@ -9,6 +9,7 @@ type CategoryStore interface {
 	ListManagedCategories(ctx context.Context) ([]Category, error)
 	UpdateCategory(ctx context.Context, c *Category) error
 	DeleteCategory(ctx context.Context, id int64) error
+	ReorderCategories(ctx context.Context, ids []string) error
 }
 
 // ServiceStore defines operations for services

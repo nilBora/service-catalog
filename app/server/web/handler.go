@@ -82,6 +82,7 @@ func (h *Handler) Register(r chi.Router) {
 		r.Get("/web/categories/new", h.handleCategoryForm)
 		r.Get("/web/categories/{id}/edit", h.handleCategoryEditForm)
 		r.Post("/web/categories", h.handleCategoryCreate)
+		r.Post("/web/categories/reorder", h.handleCategoryReorder)
 		r.Put("/web/categories/{id}", h.handleCategoryUpdate)
 		r.Delete("/web/categories/{id}", h.handleCategoryDelete)
 

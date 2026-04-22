@@ -175,23 +175,36 @@ func (s *DB) ListCategories(ctx context.Context) ([]string, error) {
 	return categories, nil
 }
 
-// GetServicesGroupedByCategory returns services grouped by category with ordered category list
+// GetServicesGroupedByCategory returns services grouped by category, ordered by categories.sort_order
 func (s *DB) GetServicesGroupedByCategory(ctx context.Context) (map[string][]Service, []string, error) {
 	services, err := s.ListServices(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	grouped := make(map[string][]Service)
-	var orderedCats []string
-	seen := make(map[string]bool)
+	managedCats, err := s.ListManagedCategories(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
 
+	grouped := make(map[string][]Service)
 	for _, svc := range services {
-		if !seen[svc.Category] {
-			seen[svc.Category] = true
-			orderedCats = append(orderedCats, svc.Category)
-		}
 		grouped[svc.Category] = append(grouped[svc.Category], svc)
+	}
+
+	// Managed categories first (in sort_order), then orphan categories
+	seen := make(map[string]bool)
+	var orderedCats []string
+	for _, cat := range managedCats {
+		if _, exists := grouped[cat.Name]; exists {
+			orderedCats = append(orderedCats, cat.Name)
+			seen[cat.Name] = true
+		}
+	}
+	for cat := range grouped {
+		if !seen[cat] {
+			orderedCats = append(orderedCats, cat)
+		}
 	}
 
 	return grouped, orderedCats, nil
